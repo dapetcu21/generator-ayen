@@ -1,0 +1,66 @@
+doctype html
+html(lang="ro")
+  head
+    //- Bots
+    meta(name="fragment", content="!")
+    //- Classic
+    meta(charset="utf-8")
+    title <%= appName %>
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="description", content="<%= description %>")
+    meta(name="keywords", content="<%= keywords.join(', ') %>")
+    //- Hide Safari's bars
+    meta(name="apple-mobile-web-app-capable", content="yes")
+    meta(name="apple-mobile-web-app-status-bar-style", content="black")
+    meta(name="viewport", content="width=device-width, minimum-scale=1, maximum-scale=1, user-scalable=no, minimal-ui")
+    //- Open Graph
+    meta(property="og:title", content="<%= appName %>")
+    meta(property="og:image", content="/assets/img/og_image.png")
+    meta(property="og:site_name", content="<%= appName %>")
+    meta(property="og:type", content="website")
+    meta(property="og:url", content="<%= stagingURL %>")
+    meta(property="og:locale", content="en_US")
+    meta(property="og:description", content="")
+    //- Google
+    meta(name="google", content="notranslate")
+    //- twitter
+    //- <meta name=”twitter:card” content=”summary”>
+    meta(name="twitter:url", content="<%= stagingURL %>")
+    meta(name="twitter:title", content="<%= appName %>")
+    meta(name="twitter:description", content="<%= description %>")
+    meta(name="twitter:image", content="/assets/img/og_image.png")
+    //- canonical url
+    link(rel="canonical", href="<%= stagingURL %>")
+    //- favicon
+    link(rel="apple-touch-icon", sizes="57x57", href="/apple-touch-icon-57x57.png")
+    link(rel="apple-touch-icon", sizes="114x114", href="/apple-touch-icon-114x114.png")
+    link(rel="apple-touch-icon", sizes="72x72", href="/apple-touch-icon-72x72.png")
+    link(rel="apple-touch-icon", sizes="144x144", href="/apple-touch-icon-144x144.png")
+    link(rel="apple-touch-icon", sizes="60x60", href="/apple-touch-icon-60x60.png")
+    link(rel="apple-touch-icon", sizes="120x120", href="/apple-touch-icon-120x120.png")
+    link(rel="apple-touch-icon", sizes="76x76", href="/apple-touch-icon-76x76.png")
+    link(rel="apple-touch-icon", sizes="152x152", href="/apple-touch-icon-152x152.png")
+    link(rel="apple-touch-icon", sizes="180x180", href="/apple-touch-icon-180x180.png")
+    link(rel="icon", type="image/png", href="/favicon-192x192.png", sizes="192x192")
+    link(rel="icon", type="image/png", href="/favicon-160x160.png", sizes="160x160")
+    link(rel="icon", type="image/png", href="/favicon-96x96.png", sizes="96x96")
+    link(rel="icon", type="image/png", href="/favicon-16x16.png", sizes="16x16")
+    link(rel="icon", type="image/png", href="/favicon-32x32.png", sizes="32x32")
+    meta(name="msapplication-TileColor", content="#ff9f19")
+    meta(name="msapplication-TileImage", content="/mstile-144x144.png")
+
+
+    //- NB: The following semantic comments are used by 'useref' and 'wiredep'
+    //- node packages to automatically do their job. See their
+    //- GitHub pages for details. Don't delete unless you know what you are doing.
+
+    // build:css({frontend,www}) /css/main.css
+    // bower:css
+    // endbower
+    link(rel="stylesheet", href="css/main.css")
+    // endbuild
+  body
+    #main-view.layout-container
+    // build:js({frontend,www}) /js/main.js
+    script(src="js/main.js")
+    // endbuild

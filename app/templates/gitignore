@@ -1,0 +1,11 @@
+node_modules
+*.swp
+*.swo
+.DS_Store
+.tmp
+.env
+coverage
+www
+app/js/gen/templates.js
+app/bower_components
+*.log

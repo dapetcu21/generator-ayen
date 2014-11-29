@@ -1,0 +1,20 @@
+{
+  "name": "<%= packageName %>",
+  "version": "0.0.1",
+  "homepage": "https://github.com/<%= githubName %>/<%= packageName %>",
+  "authors": [
+    "<%= author %>"
+  ],
+  "description": "<%= description %>",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "~3.2.0",
+    "fontawesome": "~4.2.0"
+  }
+}

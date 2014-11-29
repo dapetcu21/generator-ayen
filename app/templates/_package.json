@@ -1,0 +1,27 @@
+{
+  "name": "<%= packageName %>",
+  "version": "0.0.1",
+  "description": "<%= description %>",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/gulp/bin/gulp.js test:once && if [ $CI ]; then npm run coveralls; fi",
+    "coveralls": "cat ./coverage/phantomjs/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
+    "postinstall": "bash ./postinstall.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/<%= githubName %>/<%= packageName %>"
+  },
+  "keywords": <%= JSON.stringify(keywords) %>,
+  "author": "<%= author %>",
+  "bugs": {
+    "url": "https://github.com/<%= githubName %>/<%= packageName %>/issues"
+  },
+  "homepage": "https://github.com/<%= githubName %>/<%= packageName %>",
+  "devDependencies": {
+  },
+  "dependencies": {
+    "bower": "^1.3.12",
+    "gulp": "^3.8.10"
+  }
+}
