@@ -1,5 +1,5 @@
 doctype html
-html(lang="ro")
+html
   head
     //- Bots
     meta(name="fragment", content="!")
@@ -23,15 +23,15 @@ html(lang="ro")
     meta(property="og:description", content="")
     //- Google
     meta(name="google", content="notranslate")
-    //- twitter
+    //- Twitter
     //- <meta name=”twitter:card” content=”summary”>
     meta(name="twitter:url", content="<%= stagingURL %>")
     meta(name="twitter:title", content="<%= appName %>")
     meta(name="twitter:description", content="<%= description %>")
     meta(name="twitter:image", content="/assets/img/og_image.png")
-    //- canonical url
+    //- Canonical URL
     link(rel="canonical", href="<%= stagingURL %>")
-    //- favicon
+    //- Favicon
     link(rel="apple-touch-icon", sizes="57x57", href="/apple-touch-icon-57x57.png")
     link(rel="apple-touch-icon", sizes="114x114", href="/apple-touch-icon-114x114.png")
     link(rel="apple-touch-icon", sizes="72x72", href="/apple-touch-icon-72x72.png")
@@ -49,18 +49,26 @@ html(lang="ro")
     meta(name="msapplication-TileColor", content="#ff9f19")
     meta(name="msapplication-TileImage", content="/mstile-144x144.png")
 
+    //- Do not modify these semantic comments. They are used by useref and 
+    //- wiredep to compile dependencies into single minified CSS and JS files
 
-    //- NB: The following semantic comments are used by 'useref' and 'wiredep'
-    //- node packages to automatically do their job. See their
-    //- GitHub pages for details. Don't delete unless you know what you are doing.
-
-    // build:css({frontend,www}) /css/main.css
-    // bower:css
-    // endbower
+    //build:css css/main.css
+    //bower:css
+    //endbower
+    //- Add additional CSS links here if you need any
+    //- CSS files installed with Bower are included automatically
     link(rel="stylesheet", href="css/main.css")
-    // endbuild
+    //endbuild
+
   body
-    #main-view.layout-container
-    // build:js({frontend,www}) /js/main.js
+    #main-view
+
+    //- It's preferrable to load AMD or CommonJS libraries with require()
+    //- instead of adding them via script tags. NPM and Bower packages work 
+    //- with require(). Bower packages can be all included at once with
+    //- require('bower-components'), or individually by their package name
+
+    //build:js js/main.js
+    //- Add additional script tags here if you need any
     script(src="js/main.js")
-    // endbuild
+    //endbuild

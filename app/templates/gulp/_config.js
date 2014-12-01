@@ -1,16 +1,58 @@
 'use strict';
 
-module.exports = {};
-module.exports.plugins = require('gulp-load-plugins')();
+var path = require('path');
 
-module.exports.paths = {
-  'tmp': './.tmp',
-  'dist': './dist',
-  'app': './app',
-  'test': './test'
+var config = module.exports = {};
+config.plugins = require('gulp-load-plugins')();
+
+config.paths = {
+  'www': './www',
+  'app': './frontend',
+  'test': './tests'
 };
 
-module.exports.handleError = function (e) {
-  module.exports.plugins.util.log(e.message);
+config.browserify = {
+  
+};
+
+// Conventionally, Bower Javascript packages used to export globals. Deamdify
+// strips away this behaviour in favor of module.exports
+// Some bower packages depend on other packages to export globals, so we need
+// a workaround to redefine them.
+//
+// For example, in a setup without deamdify, jquery would have exported
+// window.$ and window.jQuery. Bootstrap depends on those globals to be
+// defined and won't work without them.
+config.bowerGlobals = {
+  'jquery': ['$', 'jQuery'],
+};
+
+config.aliasify = {
+  configDir: path.resolve(config.paths.app + '/js'),
+  aliases: {
+    'bower-components': './lib/bower-components',
+    'templates': './lib/templates',
+  }
+};
+
+config.stylus = {
+    'include css': true,
+    'resolve url': true,
+};
+
+config.autoprefixer = [
+  'ie >= 8',
+  'ie_mob >= 9',
+  'ff >= 30',
+  'chrome >= 30',
+  'safari >= 6',
+  'opera >= 23',
+  'ios >= 6',
+  'android >= 2.3',
+  'bb >= 9'
+];
+
+config.handleError = function (e) {
+  config.plugins.util.log(e.message);
   this.emit('end');
 };

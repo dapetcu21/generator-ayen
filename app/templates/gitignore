@@ -6,6 +6,7 @@ node_modules
 .env
 coverage
 www
-app/js/gen/templates.js
+app/js/lib/templates.js
+app/js/lib/bower-components.js
 app/bower_components
 *.log

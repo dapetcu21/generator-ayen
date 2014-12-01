@@ -10,26 +10,26 @@ var browserSync = require('browser-sync');
 // Common watch hooks.
 gulp.task('watch:common', ['build'], function () {
   gulp.watch(paths.app + '/index.jade', ['index.html']);
-  gulp.watch(paths.app + '/templates/**/*.jade', ['js:dev']);
-  gulp.watch(paths.app + '/js/lib/**/*.js', ['js:dev']);
-  gulp.watch(paths.app + '/js/lib/**/*.json', ['js:dev']);
-  gulp.watch(paths.app + '/posts/**/*.jade', ['js:dev']);
-  gulp.watch([paths.app + '/**/*.js',
-              '!' + paths.app + '/js/lib/templates.js',
-              '!' + paths.app + '/js/lib/posts-templates.js'], ['js:dev']);
   gulp.watch(paths.app + '/**/**/*.styl', ['css']);
-  gulp.watch(['bower.json'], ['wiredep']);
+  gulp.watch(paths.app + '/templates/**/*.jade', ['js']);
+  gulp.watch([
+    paths.app + '/js/**/*.js',
+    paths.app + '/js/**/*.json',
+    '!' + paths.app + '/js/lib/templates.js',
+    '!' + paths.app + '/js/lib/bower-components.js'
+  ], ['js:no-deps']);
+  gulp.watch(['bower.json'], ['js', 'index.html']);
 });
 
 // Build the project and start a web development server.
 gulp.task('watch', ['watch:common'], function (done) {
-  browserSyncRun(done, [paths.tmp, paths.app]);
+  browserSyncRun(done);
 });
 
-function browserSyncRun(done, path) {
+function browserSyncRun(done) {
   browserSync({
     server: {
-      baseDir: path
+      baseDir: paths.www
     },
     port: 4000
   }, function () {
@@ -37,12 +37,7 @@ function browserSyncRun(done, path) {
   });
 }
 
-// Serve the ./.tmp folder using a static web development server.
+// Serve the ./www folder using a static web development server.
 gulp.task('serve', function (done) {
-  browserSyncRun(done, [paths.tmp, paths.app]);
-});
-
-// Serve the ./dist folder using a static web development server.
-gulp.task('serve:dist', function (done) {
-  browserSyncRun(done, paths.dist);
+  browserSyncRun(done);
 });

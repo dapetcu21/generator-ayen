@@ -17,7 +17,7 @@ var karmaConf = {
   files: [
     paths.app + '/bower_components/jquery/dist/jquery.min.js',
     paths.app + '/bower_components/bootstrap/dist/js/bootstrap.min.js',
-    paths.tmp + '/js/main.js',
+    paths.www + '/js/main.js',
     './node_modules/should/should.min.js',
     paths.test + '/**/*.spec.js'
   ],
@@ -31,7 +31,7 @@ var karmaConf = {
   }
 };
 
-karmaConf.preprocessors[paths.tmp + '/js/main.js'] = ['coverage'];
+karmaConf.preprocessors[paths.www + '/js/main.js'] = ['coverage'];
 
 // Start the TDD workflow.
 gulp.task('test', function (done) {
