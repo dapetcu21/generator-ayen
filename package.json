@@ -2,7 +2,7 @@
   "name": "generator-ayen",
   "version": "0.0.2",
   "description": "Yeoman generator for a full stack, testable, web app development workflow with Browserify, Jade, Stylus, Gulp and Bower",
-  "license": "MIT",
+  "license": "MPL-2.0",
   "main": "app/index.js",
   "repository": "dapetcu21/generator-ayen",
   "author": {
