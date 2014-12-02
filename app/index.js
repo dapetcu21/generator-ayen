@@ -8,11 +8,11 @@ var nodefn = require('when/node');
 var callbacks = require('when/callbacks');
 
 var exec = require('child_process').exec;
-function execute(command, callback){
+function execute(command){
     return nodefn.call(exec, command);
-};
+}
 
-var TestifyGenerator = yeoman.generators.Base.extend({
+var AyenGenerator = yeoman.generators.Base.extend({
   initializing: function () {
     this.pkg = require('../package.json');
   },
@@ -23,7 +23,7 @@ var TestifyGenerator = yeoman.generators.Base.extend({
 
     // Have Yeoman greet the user.
     this.log(yosay(
-      'Hi! I\'m Testify, a minimal generator that will help you create a full stack, testable, web app with Browserify, Jade, Stylus, Gulp and Bower.'
+      'Hi! I\'m Ayen, a minimal generator that will help you create a full stack, testable, web app with Browserify, Jade, Stylus, Gulp and Bower.'
     ));
 
 
@@ -165,4 +165,4 @@ var TestifyGenerator = yeoman.generators.Base.extend({
   }
 });
 
-module.exports = TestifyGenerator;
+module.exports = AyenGenerator;
