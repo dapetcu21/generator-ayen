@@ -6,6 +6,8 @@ var yosay = require('yosay');
 var when = require('when');
 var nodefn = require('when/node');
 var callbacks = require('when/callbacks');
+var chalk = require('chalk');
+var _ = require('lodash');
 
 var exec = require('child_process').exec;
 function execute(command){
@@ -17,15 +19,31 @@ var AyenGenerator = yeoman.generators.Base.extend({
     this.pkg = require('../package.json');
   },
 
+  _promptAndSave: function (prompts, config, cb) {
+    _.each(prompts, function(obj) {
+      if (config[obj.name] !== undefined) {
+        obj.default = config[obj.name];
+      }
+    });
+    this.prompt(prompts, function(results) {
+      _.each(results, function(value, key) {
+        config[key] = value;
+      });
+      return cb(results);
+    });
+  },
+
   prompting: function () {
     var done = this.async();
     var self = this;
+    var config = this._configuration = this.config.getAll();
 
     // Have Yeoman greet the user.
     this.log(yosay(
       'Hi! I\'m Ayen, a minimal generator that will help you create a full stack, testable, web app with Browserify, Jade, Stylus, Gulp and Bower.'
     ));
 
+    this.log('Scaffolding in ' + chalk.blue(this.destinationRoot()));
 
     var gitName, gitMail;
 
@@ -63,7 +81,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
         default: (gitMail === undefined) ? 'somename' : gitMail.replace(/@.*/, ''),
       }];
 
-      return callbacks.call(self.prompt.bind(self, prompts));
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
 
     }).then(function (props) {
       self.appName = props.appName;
@@ -82,7 +100,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
         default: packageName,
       }];
 
-      return callbacks.call(self.prompt.bind(self, prompts));
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
 
     }).then(function (props) {
       self.packageName = props.packageName;
@@ -106,7 +124,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
         default: 'website, awesome',
       }];
 
-      return callbacks.call(self.prompt.bind(self, prompts));
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
 
     }).then(function (props) {
       self.stagingURL = props.stagingURL;
@@ -150,6 +168,8 @@ var AyenGenerator = yeoman.generators.Base.extend({
       this.src.copy('_gulpfile.js', 'gulpfile.js');
       this.src.copy('bowerrc', '.bowerrc');
       this.src.copy('postinstall.sh', 'postinstall.sh');
+
+      this.config.set(this._configuration);
     },
 
     projectfiles: function () {
