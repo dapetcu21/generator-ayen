@@ -17,7 +17,7 @@ npm install -g yo
 To install generator-ayen from npm, run:
 
 ```bash
-npm install -g generator-anyen
+npm install -g generator-ayen
 ```
 
 ### Installing Gulp
