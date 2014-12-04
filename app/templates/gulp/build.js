@@ -35,9 +35,9 @@ var aliasify = require('aliasify');
 
 // Generate JS functions from Jade templates.
 gulp.task('templates' , function () {
-  var templates = templatizer(paths.app + '/templates', null, {});
-  return nodefn.call(fs.mkdirp, paths.app + '/js/lib').then(function () {
-    return nodefn.call(fs.writeFile, paths.app + '/js/lib/templates.js', templates);
+  var templates = templatizer(paths.client + '/templates', null, {});
+  return nodefn.call(fs.mkdirp, paths.client + '/js/lib').then(function () {
+    return nodefn.call(fs.writeFile, paths.client + '/js/lib/templates.js', templates);
   });
 });
 
@@ -48,7 +48,7 @@ gulp.task('bower-components:js', function () {
   _.each(mainBowerFiles({ 
     filter: '**/*.js',
   }), function (file) {
-    file = path.relative(paths.app + '/bower_components', file);
+    file = path.relative(paths.client + '/bower_components', file);
     packages[file.split('/')[0]] = true;
   });
 
@@ -67,8 +67,8 @@ gulp.task('bower-components:js', function () {
     return req;
   }).join('');
 
-  return nodefn.call(fs.mkdirp, paths.app + '/js/lib').then(function () {
-    return nodefn.call(fs.writeFile, paths.app + '/js/lib/bower-components.js', contents);
+  return nodefn.call(fs.mkdirp, paths.client + '/js/lib').then(function () {
+    return nodefn.call(fs.writeFile, paths.client + '/js/lib/bower-components.js', contents);
   });
 });
 
@@ -80,7 +80,7 @@ function generateMainJS(opts) {
   opts = opts || {};
 
   var browserifyOpts = _.extend({
-    entries: [paths.app + '/js/main.js'],
+    entries: [paths.client + '/js/main.js'],
     debug: !!opts.debug
   }, config.browserify);
 
@@ -113,7 +113,7 @@ function generateMainJS(opts) {
   }
 
   return stream
-    .pipe(source(paths.app + '/js/main.js'))
+    .pipe(source(paths.client + '/js/main.js'))
     .pipe($.rename('main.js'));
 }
 
@@ -121,7 +121,7 @@ function generateMainJS(opts) {
 gulp.task('js:dist', ['js:dependencies', 'index.html:dist'], function () {
   return resolveRef(generateMainJS(), refSpec.js, 'js/main.js')
     .pipe($.uglify())
-    .pipe(gulp.dest(paths.www));
+    .pipe(gulp.dest(paths.public));
 });
 
 // Bundles Browserify with Istanbul coverage maps.
@@ -129,7 +129,7 @@ gulp.task('js:coverage', ['js:dependencies'], function () {
   return generateMainJS({
     debug: true,
     istanbul: true,
-  }).pipe(gulp.dest(paths.www + '/js/'));
+  }).pipe(gulp.dest(paths.public + '/js/'));
 });
 
 // Bundles Browserify incrementally with source maps
@@ -137,7 +137,7 @@ gulp.task('js', ['js:dependencies'], function () {
   return generateMainJS({
     debug: true,
     incremental: true,
-  }).pipe(gulp.dest(paths.www + '/js/'))
+  }).pipe(gulp.dest(paths.public + '/js/'))
     .pipe(browserSync.reload({stream: true}));
 });
 
@@ -146,21 +146,21 @@ gulp.task('js:no-deps', function () {
   return generateMainJS({
     debug: true,
     incremental: true,
-  }).pipe(gulp.dest(paths.www + '/js/'))
+  }).pipe(gulp.dest(paths.public + '/js/'))
     .pipe(browserSync.reload({stream: true}));
 });
 
 //--- Generate main.css
 
 function generateMainCSS() {
-  return gulp.src(paths.app + '/css/main.styl')
+  return gulp.src(paths.client + '/css/main.styl')
     .pipe($.stylus(config.stylus))
     .pipe($.autoprefixer(config.autoprefixer));
 }
 
 gulp.task('css', function () {
   return generateMainCSS()
-    .pipe(gulp.dest(paths.www + '/css'))
+    .pipe(gulp.dest(paths.public + '/css'))
     .pipe(browserSync.reload({stream: true}));
 });
 
@@ -169,7 +169,7 @@ gulp.task('css:dist', ['index.html:dist'], function () {
   cssPath = 'css/main.css';
   return resolveRef(generateMainCSS(), refSpec.css, 'css/main.css')
     .pipe($.minifyCss())
-    .pipe(gulp.dest(paths.www));
+    .pipe(gulp.dest(paths.public));
 });
 
 //--- Bower assets
@@ -187,7 +187,7 @@ function makeSymlink(src, dst) {
 
 // When doing a minimal build, just symlink the bower components folder
 gulp.task('bower-components:assets:link', ['mkdirp'], function () {
-  return makeSymlink(paths.app + '/bower_components', paths.www + '/bower_components');
+  return makeSymlink(paths.client + '/bower_components', paths.public + '/bower_components');
 });
 
 // When doing a full build, extract just the necessary files (currently just fonts)
@@ -195,17 +195,17 @@ gulp.task('bower-components:assets:link', ['mkdirp'], function () {
 gulp.task('bower-components:assets:copy', function () {
   return gulp.src(mainBowerFiles({
     filter: '**/*.{eot,svg,ttf,woff}'
-  })).pipe(gulp.dest(paths.www));
+  })).pipe(gulp.dest(paths.public));
 });
 
 //--- Assets
 
 gulp.task('mkdirp', function () {
-  return nodefn.call(fs.mkdirp, paths.www);
+  return nodefn.call(fs.mkdirp, paths.public);
 });
 
 function forEachAsset(cb) {
-  var assetsPath = paths.app + '/assets';
+  var assetsPath = paths.client + '/assets';
   return nodefn.call(fs.readdir, assetsPath).then(function (files) {
     return when.all(_.map(files, function (file) {
       // Ignore dotfiles
@@ -220,26 +220,26 @@ function forEachAsset(cb) {
 // When doing a minimal build, just symlink all the assets
 gulp.task('assets:link', ['mkdirp'], function () {
   return forEachAsset(function (file) {
-    return makeSymlink(paths.app + '/assets/' + file, paths.www + '/' + file);
+    return makeSymlink(paths.client + '/assets/' + file, paths.public + '/' + file);
   });
 });
 
 // When doing a full build, remove the symlinks and copy them in full
 gulp.task('assets:clean', function () {
   return forEachAsset(function (file) {
-    return nodefn.call(fs.rmrf, paths.www + '/' + file);
+    return nodefn.call(fs.rmrf, paths.public + '/' + file);
   });
 });
 
 gulp.task('assets:copy', ['assets:clean'], function () {
-  return gulp.src(paths.app + '/assets/**')
-    .pipe(gulp.dest(paths.www));
+  return gulp.src(paths.client + '/assets/**')
+    .pipe(gulp.dest(paths.public));
 });
 
 //--- Generate index.html
 
 function generateIndexHTML() {
-  return gulp.src(paths.app + '/index.jade')
+  return gulp.src(paths.client + '/index.jade')
     .pipe($.jade({
       pretty: true
     }))
@@ -249,7 +249,7 @@ function generateIndexHTML() {
 // Generate index.html for development
 gulp.task('index.html', function () {
   return generateIndexHTML()
-    .pipe(gulp.dest(paths.www))
+    .pipe(gulp.dest(paths.public))
     .pipe(browserSync.reload({stream: true}));
 });
 
@@ -263,7 +263,7 @@ gulp.task('index.html:dist', ['js:dependencies'], function () {
       refSpec = res[1];
     }))
     .pipe($.minifyHtml())
-    .pipe(gulp.dest(paths.www));
+    .pipe(gulp.dest(paths.public));
 });
 
 //--- Resolve useref concatenation
@@ -275,7 +275,7 @@ function resolveRef(stream, spec, mainFile) {
     if (file === mainFile) {
       q.queue(stream);
     } else {
-      q.queue(gulp.src(paths.app + '/' + file));
+      q.queue(gulp.src(paths.client + '/' + file));
     }
   });
 
@@ -307,7 +307,7 @@ gulp.task('critical', ['build:dist:base'], function () {
     .then(function () {
       return nodefn.call(penthouse, {
         url: 'http://127.0.0.1:' + config.serverProxyPort,
-        css: paths.www + '/' + cssPath,
+        css: paths.public + '/' + cssPath,
         width: 1440,
         height: 900
       });
@@ -322,10 +322,10 @@ gulp.task('critical', ['build:dist:base'], function () {
 });
 
 gulp.task('build:dist', ['critical'], function () {
-  return gulp.src(paths.www + '/index.html')
+  return gulp.src(paths.public + '/index.html')
     .pipe($.replace(
       '<link rel=stylesheet href=' + cssPath + '>',
       '<style>' + CRIT + '</style>'
     ))
-    .pipe(gulp.dest(paths.www));
+    .pipe(gulp.dest(paths.public));
 });

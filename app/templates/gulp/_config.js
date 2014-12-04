@@ -6,9 +6,9 @@ var config = module.exports = {};
 config.plugins = require('gulp-load-plugins')();
 
 config.paths = {
-  'www': './www',
-  'app': './frontend',
-  'server': './backend',
+  'public': './public',
+  'client': './client',
+  'server': './server',
   'test': './tests'
 };
 
@@ -29,7 +29,7 @@ config.bowerGlobals = {
 };
 
 config.aliasify = {
-  configDir: path.resolve(config.paths.app + '/js'),
+  configDir: path.resolve(config.paths.client + '/js'),
   aliases: {
     'bower-components': './lib/bower-components',
     'templates': './lib/templates',

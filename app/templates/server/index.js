@@ -7,7 +7,7 @@ var app = express();
 // Ayen requires this for BrowserSync proxying and Critical CSS
 var port = parseInt(process.env.PORT, 10) || 4000;
 
-app.use(express.static(__dirname + '/../www'));
+app.use(express.static(__dirname + '/../public'));
 
 app.get('/api/example_endpoint', function (req, res) {
   res.status(200);

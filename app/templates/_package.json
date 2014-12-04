@@ -4,7 +4,7 @@
   "description": "<%= description %>",
   "main": "index.js",
   "scripts": {
-    "start": "node ./backend/index.js",
+    "start": "node ./server/index.js",
     "test": "./node_modules/gulp/bin/gulp.js test:once && if [ $CI ]; then npm run coveralls; fi",
     "coveralls": "cat ./coverage/phantomjs/lcov.info | ./node_modules/coveralls/bin/coveralls.js",
     "postinstall": "bash ./postinstall.sh"

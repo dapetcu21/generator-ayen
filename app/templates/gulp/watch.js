@@ -11,14 +11,14 @@ var createServer = require('./server');
 
 // Common watch hooks.
 gulp.task('watch:common', ['build'], function () {
-  gulp.watch(paths.app + '/index.jade', ['index.html']);
-  gulp.watch(paths.app + '/**/**/*.styl', ['css']);
-  gulp.watch(paths.app + '/templates/**/*.jade', ['js']);
+  gulp.watch(paths.client + '/index.jade', ['index.html']);
+  gulp.watch(paths.client + '/**/**/*.styl', ['css']);
+  gulp.watch(paths.client + '/templates/**/*.jade', ['js']);
   gulp.watch([
-    paths.app + '/js/**/*.js',
-    paths.app + '/js/**/*.json',
-    '!' + paths.app + '/js/lib/templates.js',
-    '!' + paths.app + '/js/lib/bower-components.js'
+    paths.client + '/js/**/*.js',
+    paths.client + '/js/**/*.json',
+    '!' + paths.client + '/js/lib/templates.js',
+    '!' + paths.client + '/js/lib/bower-components.js'
   ], ['js:no-deps']);
   gulp.watch(['bower.json'], ['js', 'index.html']);
 });

@@ -147,19 +147,19 @@ var AyenGenerator = yeoman.generators.Base.extend({
         stagingURL: this.stagingURL,
       };
 
-      this.dest.mkdir('frontend');
-      this.dest.mkdir('frontend/js');
-      this.dest.mkdir('frontend/css');
-      this.dest.mkdir('frontend/templates');
-      this.dest.mkdir('frontend/templates/includes');
+      this.dest.mkdir('client');
+      this.dest.mkdir('client/js');
+      this.dest.mkdir('client/css');
+      this.dest.mkdir('client/templates');
+      this.dest.mkdir('client/templates/includes');
 
-      this.template('frontend/index.jade', 'frontend/index.jade', context);
-      this.directory('frontend/js', 'frontend/js');
-      this.directory('frontend/css', 'frontend/css');
-      this.directory('frontend/assets', 'frontend/assets');
-      this.directory('frontend/templates', 'frontend/templates');
+      this.template('client/index.jade', 'client/index.jade', context);
+      this.directory('client/js', 'client/js');
+      this.directory('client/css', 'client/css');
+      this.directory('client/assets', 'client/assets');
+      this.directory('client/templates', 'client/templates');
 
-      this.directory('backend', 'backend');
+      this.directory('server', 'server');
       this.directory('gulp', 'gulp');
       this.directory('tests', 'tests');
 
