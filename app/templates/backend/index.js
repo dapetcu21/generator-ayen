@@ -5,7 +5,7 @@ var app = express();
 
 // Whatever you do, make sure you adjust your port according to process.env.PORT
 // Ayen requires this for BrowserSync proxying and Critical CSS
-var port = parseInt(process.env.PORT, 10) || 80;
+var port = parseInt(process.env.PORT, 10) || 4000;
 
 app.use(express.static(__dirname + '/../www'));
 
@@ -25,4 +25,4 @@ console.log('Server running at http://localhost:' + port);
 // Ayen needs to wait for your server to start before firing up BrowserSync. 
 // This line gives it the cue, but the wait times out after 4 seconds if the
 // cue doesn't show up and BrowserSync is fired up anyway.
-process.send('serverStarted');
+if (process.send) { process.send('serverStarted'); }
