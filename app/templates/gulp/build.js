@@ -4,6 +4,8 @@ var config = require('./_config.js');
 var paths = config.paths;
 var $ = config.plugins;
 
+var runServer = require('./server');
+
 var _ = require('lodash');
 var when = require('when');
 var nodefn = require('when/node');
@@ -17,7 +19,6 @@ var vinylBuffer = require('vinyl-buffer');
 var source = require('vinyl-source-stream');
 
 var penthouse = require('penthouse');
-var express = require('express');
 var templatizer = require('templatizer');
 var mainBowerFiles = require('main-bower-files');
 var browserSync = require('browser-sync');
@@ -301,35 +302,23 @@ gulp.task('build:dist:base', ['index.html:dist', 'js:dist', 'css:dist', 'bower-c
 var CRIT = '';
 
 gulp.task('critical', ['build:dist:base'], function () {
-  // Start a local express server for penthouse.
-  var app = express();
-  var port = 8765;
-
-  app.use(express.static(path.resolve(paths.www)));
-
-  app.get('*', function (request, response) {
-    response.sendFile(path.resolve(paths.www + '/index.html'));
-  });
-
-  return when.promise(function (resolve, reject) {
-    var server = app.listen(port, function () {
-      penthouse({
-        url: 'http://localhost:' + port,
+  // Start a server for penthouse.
+  return runServer(config.serverProxyPort)
+    .then(function () {
+      return nodefn.call(penthouse, {
+        url: 'http://127.0.0.1:' + config.serverProxyPort,
         css: paths.www + '/' + cssPath,
         width: 1440,
         height: 900
-      }, function (err, criticalCSS) {
-        server.close();
-        if (err) {
-          reject(err);
-        } else {
-          CRIT = criticalCSS.replace('\n', '');
-          $.util.log('Critical CSS size: ' + criticalCSS.length + ' bytes.');
-          resolve();
-        }
       });
+    })
+    .then(function(criticalCSS) {
+      CRIT = criticalCSS;
+      $.util.log('Critical CSS size: ' + criticalCSS.length + ' bytes.');
+    })
+    .finally(function () {
+      runServer.close();
     });
-  });
 });
 
 gulp.task('build:dist', ['critical'], function () {

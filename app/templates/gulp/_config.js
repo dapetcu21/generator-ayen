@@ -8,6 +8,7 @@ config.plugins = require('gulp-load-plugins')();
 config.paths = {
   'www': './www',
   'app': './frontend',
+  'server': './backend',
   'test': './tests'
 };
 
@@ -51,6 +52,11 @@ config.autoprefixer = [
   'android >= 2.3',
   'bb >= 9'
 ];
+
+config.serverPort = 4000;
+config.serverProxyPort = 4500;
+config.serverStartTimeout = 4000;
+config.serverEnvVars = {};
 
 config.handleError = function (e) {
   config.plugins.util.log(e.message);

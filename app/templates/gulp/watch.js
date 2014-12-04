@@ -1,11 +1,13 @@
 'use strict';
 
 var gulp = require('gulp');
+var nodefn = require('when/node');
 
-var config = require('./_config.js');
+var config = require('./_config');
 var paths = config.paths;
 
 var browserSync = require('browser-sync');
+var createServer = require('./server');
 
 // Common watch hooks.
 gulp.task('watch:common', ['build'], function () {
@@ -21,23 +23,24 @@ gulp.task('watch:common', ['build'], function () {
   gulp.watch(['bower.json'], ['js', 'index.html']);
 });
 
-// Build the project and start a web development server.
-gulp.task('watch', ['watch:common'], function (done) {
-  browserSyncRun(done);
-});
-
-function browserSyncRun(done) {
-  browserSync({
-    server: {
-      baseDir: paths.www
-    },
-    port: 4000
-  }, function () {
-    done();
-  });
+// Run browserSync
+function browserSyncRun() {
+  return createServer(config.serverProxyPort)
+    .then(function () {
+      return nodefn.call(browserSync, {
+        proxy: '127.0.0.1:' + config.serverProxyPort,
+        port: config.serverPort,
+      });
+    });
 }
 
+
+// Build the project and start a web development server.
+gulp.task('watch', ['watch:common'], function () {
+  return browserSyncRun();
+});
+
 // Serve the ./www folder using a static web development server.
-gulp.task('serve', function (done) {
-  browserSyncRun(done);
+gulp.task('serve', function () {
+  return browserSyncRun();
 });
