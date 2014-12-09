@@ -30,6 +30,7 @@ var istanbul = require('browserify-istanbul');
 var debowerify = require('debowerify');
 var deamdify = require('deamdify');
 var aliasify = require('aliasify');
+var filterTransform = require('filter-transform');
 
 //--- Generate JS files
 
@@ -94,7 +95,9 @@ function generateMainJS(opts) {
     bundle = browserify(browserifyOpts);
     bundle.transform(aliasify.configure(config.aliasify));
     bundle.transform(debowerify);
-    bundle.transform(deamdify);
+    bundle.transform(filterTransform(function (file) {
+      return /bower_components/.test(file);
+    } ,deamdify));
     if (opts.instanbul) {
       bundle.transform(istanbul({
         ignore: ['**/lib/**']
