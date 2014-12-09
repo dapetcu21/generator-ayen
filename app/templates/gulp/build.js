@@ -26,6 +26,7 @@ var useref = require('node-useref');
 var StreamQueue = require('streamqueue');
 
 var browserify = require('browserify');
+var watchify = require('watchify');
 var istanbul = require('browserify-istanbul');
 var debowerify = require('debowerify');
 var deamdify = require('deamdify');
@@ -76,7 +77,6 @@ gulp.task('bower-components:js', function () {
 // Run this before any JS task, because Browserify needs to bundle them in.
 gulp.task('js:dependencies', ['templates', 'bower-components:js'], function () {});
 
-var incrementalBundle = null;
 function generateMainJS(opts) {
   opts = opts || {};
 
@@ -87,12 +87,11 @@ function generateMainJS(opts) {
 
   var bundle, stream;
 
-  opts.incremental = false;
-
-  if (opts.incremental && incrementalBundle) {
-    bundle = incrementalBundle;
+  if (opts.incremental && config.shared.incrementalBundle) {
+    bundle = config.shared.incrementalBundle;
   } else {
     bundle = browserify(browserifyOpts);
+
     bundle.transform(aliasify.configure(config.aliasify));
     bundle.transform(debowerify);
     bundle.transform(filterTransform(function (file) {
@@ -103,10 +102,11 @@ function generateMainJS(opts) {
         ignore: ['**/lib/**']
       }));
     }
-  }
 
-  if (opts.incremental) { 
-    incrementalBundle = bundle;
+    if (opts.incremental) { 
+      bundle = watchify(bundle);
+      config.shared.incrementalBundle = bundle;
+    }
   }
 
   stream = bundle.bundle();

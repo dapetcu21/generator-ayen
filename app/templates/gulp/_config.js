@@ -62,3 +62,6 @@ config.handleError = function (e) {
   config.plugins.util.log(e.message);
   this.emit('end');
 };
+
+// Inter-task shared space
+config.shared = {};

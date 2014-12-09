@@ -13,14 +13,14 @@ var createServer = require('./server');
 gulp.task('watch:common', ['build'], function () {
   gulp.watch(paths.client + '/index.jade', ['index.html']);
   gulp.watch(paths.client + '/**/**/*.styl', ['css']);
-  gulp.watch(paths.client + '/templates/**/*.jade', ['js']);
-  gulp.watch([
-    paths.client + '/js/**/*.js',
-    paths.client + '/js/**/*.json',
-    '!' + paths.client + '/js/lib/templates.js',
-    '!' + paths.client + '/js/lib/bower-components.js'
-  ], ['js:no-deps']);
-  gulp.watch(['bower.json'], ['js', 'index.html']);
+  gulp.watch(paths.client + '/templates/**/*.jade', ['js:dependencies']);
+  gulp.watch(['bower.json'], ['js:dependencies', 'index.html']);
+
+  if (config.shared.incrementalBundle) {
+    config.shared.incrementalBundle.on('update', function () {
+      gulp.run('js:no-deps');
+    });
+  }
 });
 
 // Run browserSync
