@@ -195,7 +195,17 @@ gulp.task('bower-components:assets:link', ['mkdirp'], function () {
 gulp.task('bower-components:assets:copy', function () {
   return gulp.src(mainBowerFiles({
     filter: '**/*.{eot,svg,ttf,woff}'
-  })).pipe(gulp.dest(paths.public));
+  }))
+    .pipe($.tap(function(file) {
+      // Still not the perfect solution. A perfect solution would look at  
+      // the associated CSS file's location and derive from there
+      var relPath = path.relative(path.resolve(paths.client), file.path);
+      var match = /bower_components\/[^\/]*/.exec(relPath);
+      if (match) {
+        file.base = path.resolve(paths.client, match[0]);
+      }
+    }))
+    .pipe(gulp.dest(paths.public));
 });
 
 //--- Assets
