@@ -37,6 +37,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
     var done = this.async();
     var self = this;
     var config = this._configuration = this.config.getAll();
+    var rescaffolding = !_.isEmpty(this.config);
 
     // Have Yeoman greet the user.
     this.log(yosay(
@@ -131,8 +132,129 @@ var AyenGenerator = yeoman.generators.Base.extend({
       self.description = props.description;
       self.keywords = props.keywords.split(/[, ]+/);
 
-      done();
-    });
+      var prompts = [{
+        type: 'list',
+        name: 'cssPrecompiler',
+        choices: [{
+          name: 'Stylus',
+          value: 'stylus',
+        },{
+          name: 'SASS',
+          value: 'sass',
+        },{
+          name: 'LESS',
+          value: 'less',
+        },{
+          name: 'Plain CSS',
+          value: 'css',
+        }],
+        message: 'Pick your CSS precompiler:',
+        default: 'stylus',
+      }];
+
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
+
+    }).then(function (props) {
+      self.cssPrecompiler = props.cssPrecompiler;
+
+      var prompts = [{
+        type: 'checkbox',
+        name: 'compilerFeatures',
+        choices: [{
+          name: 'Jade templates (with templatizer)',
+          value: 'templates',
+        },{
+          name: 'React JSX',
+          value: 'react',
+        }],
+        message: 'Select your compiler features:',
+        default: [ 'templates' ],
+      }];
+
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
+
+    }).then(function (props) {
+      self.compilerFeatures = {};
+      _.each(props.compilerFeatures, function (x) {
+        self.compilerFeatures[x] = true;
+      });
+
+      if (!rescaffolding) {
+        return { templateApp: false };
+      }
+
+      var prompts = [{
+        type: 'confirm',
+        name: 'templateApp',
+        message: 'Do you wish to rescaffold your app template?',
+        default: false,
+      }];
+
+      return callbacks.call(self.prompt.bind(self, prompts));
+    }).then(function (props) {
+      self.templateApp = props.templateApp;
+
+      if (!self.templateApp) {
+        return { templateType: null };
+      }
+
+      var choices = [{
+        name: 'Simple JS app',
+        value: 'bare',
+      },{
+        name: 'BackboneJS app with a router',
+        value: 'backbone',
+      },{
+        name: 'ReactJS + Flux app with a router',
+        value: 'react',
+      }];
+
+      var prompts = [{
+        type: 'list',
+        choices: choices,
+        name: 'templateType',
+        message: 'Pick your app template:',
+        default: 0,
+      }];
+
+      return callbacks.call(self.prompt.bind(self, prompts));
+    }).then(function (props) {
+      self.templateType = props.templateType;
+
+    }).then(done);
+  },
+
+  _templatePackageJSON: function (context) {
+    var source = '_package.json';
+    var destination = 'package.json';
+
+    // Adds to package.json instead of replacing it completely
+    var json = JSON.parse(_.template(this.src.read(source), context));
+    var oldJson = {};
+    try {
+      oldJson = this.dest.readJSON(destination);
+    } catch (ex) {}
+
+    var oldJsonClone = _.cloneDeep(oldJson);
+    var result = _.extend(_.cloneDeep(json), oldJson);
+
+    result.dependencies = _.extend(
+        oldJson.dependencies || {}, json.dependencies);
+    result.devDependencies = _.extend(
+        oldJson.devDependencies || {}, json.devDependencies);
+    result.scripts = _.extend(
+        oldJson.scripts || {}, json.scripts);
+
+    if (oldJson.version) {
+      result.version = oldJson.version;
+    }
+    if (oldJson.homepage && !/$https:\/\/github.com\//.test(oldJson.homepage)) {
+      result.homepage = oldJson.homepage;
+    }
+
+    if (!_.isEqual(result, oldJsonClone)) {
+      this.dest.write(destination, JSON.stringify(result, null, 2) + '\n');
+    }
   },
 
   writing: {
@@ -145,6 +267,9 @@ var AyenGenerator = yeoman.generators.Base.extend({
         packageName: this.packageName,
         description: this.description,
         stagingURL: this.stagingURL,
+        templateType: this.templateType,
+        compilerFeatures: this.compilerFeatures,
+        cssPrecompiler: this.cssPrecompiler,
       };
 
       this.dest.mkdir('client');
@@ -163,7 +288,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
       this.directory('gulp', 'gulp');
       this.directory('tests', 'tests');
 
-      this.template('_package.json', 'package.json', context);
+      this._templatePackageJSON(context);
       this.template('_bower.json', 'bower.json');
       this.src.copy('_gulpfile.js', 'gulpfile.js');
       this.src.copy('bowerrc', '.bowerrc');
