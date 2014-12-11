@@ -1,4 +1,4 @@
-var config = require('./_config');
+var config = require('./config');
 
 var when = require('when');
 var fork = require('child_process').fork;

@@ -54,14 +54,9 @@ config.autoprefixer = [
 ];
 
 config.serverPort = 4000;
-config.serverProxyPort = 4500;
+config.serverProxyPort = 4500 + Math.floor(Math.random() * 10);
 config.serverStartTimeout = 4000;
 config.serverEnvVars = {};
-
-config.handleError = function (e) {
-  config.plugins.util.log(e.message);
-  this.emit('end');
-};
 
 // Inter-task shared space
 config.shared = {};

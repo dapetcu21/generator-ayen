@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var _ = require('lodash');
 
-var config = require('./_config.js');
+var config = require('./common/config');
 var paths = config.paths;
 
 var karma = require('karma').server;

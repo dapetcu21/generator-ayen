@@ -2,7 +2,7 @@
 
 var gulp = require('gulp');
 
-var config = require('./_config.js');
+var config = require('./common/config');
 var paths = config.paths;
 var fs = require('fs.extra');
 

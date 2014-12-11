@@ -1,13 +1,11 @@
-'use strict';
-
 var gulp = require('gulp');
 var nodefn = require('when/node');
 
-var config = require('./_config');
+var config = require('./common/config');
 var paths = config.paths;
 
 var browserSync = require('browser-sync');
-var createServer = require('./server');
+var createServer = require('./common/run-server');
 
 // Common watch hooks.
 gulp.task('watch:common', ['build'], function () {
