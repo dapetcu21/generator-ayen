@@ -10,8 +10,10 @@ var createServer = require('./common/run-server');
 // Common watch hooks.
 gulp.task('watch:common', ['build'], function () {
   gulp.watch(paths.client + '/index.jade', ['index.html']);
-  gulp.watch(paths.client + '/**/**/*.styl', ['css']);
-  gulp.watch(paths.client + '/templates/**/*.jade', ['js:dependencies']);
+  gulp.watch(paths.client + '/css/**/*.<%= cssExtension %>', ['css']);
+<% if (compilerFeatures.templates) {
+%>  gulp.watch(paths.client + '/templates/**/*.jade', ['js:dependencies']);
+<% } %>
   gulp.watch(['bower.json'], ['js:dependencies', 'index.html']);
 
   if (config.shared.incrementalBundle) {

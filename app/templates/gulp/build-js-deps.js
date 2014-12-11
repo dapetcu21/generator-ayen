@@ -11,7 +11,8 @@ var nodefn = require('when/node');
 var templatizer = require('templatizer');
 var mainBowerFiles = require('main-bower-files');
 
-// Generate JS functions from Jade templates.
+<% if (compilerFeatures.templates) {
+%>// Generate JS functions from Jade templates.
 gulp.task('templates' , function () {
   var templates = templatizer(paths.client + '/templates', null, {});
   return nodefn.call(fs.mkdirp, paths.client + '/js/lib').then(function () {
@@ -19,7 +20,7 @@ gulp.task('templates' , function () {
   });
 });
 
-// Load all Bower components into a single package
+<% } %>// Load all Bower components into a single package
 gulp.task('bower-components:js', function () {
   var packages = {};
 
@@ -51,4 +52,4 @@ gulp.task('bower-components:js', function () {
 });
 
 // Run this before any JS task, because Browserify needs to bundle them in.
-gulp.task('js:dependencies', ['templates', 'bower-components:js'], function () {});
+gulp.task('js:dependencies', [<% if (compilerFeatures.templates) { %>'templates', <% } %>'bower-components:js'], function () {});

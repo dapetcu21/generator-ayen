@@ -4,12 +4,13 @@ var $ = config.plugins;
 
 var gulp = require('gulp');
 var browserSync = require('browser-sync');
-
 var resolveUseref = require('./common/resolve-useref');
 
 function generateMainCSS() {
-  return gulp.src(paths.client + '/css/main.styl')
-    .pipe($.stylus(config.stylus))
+  return gulp.src(paths.client + '/css/main.<%= cssExtension %>')
+    .pipe($.expectFile({ errorOnFailure: true, silent: true }, '**/*.<%= cssExtension %>'))<%
+if (cssPrecompiler !== 'css') { %>
+    .pipe($.<%= cssPrecompiler %>(config.<%= cssPrecompiler %>))<% } %>
     .pipe($.autoprefixer(config.autoprefixer));
 }
 

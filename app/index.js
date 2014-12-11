@@ -195,7 +195,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
       self.templateApp = props.templateApp;
 
       if (!self.templateApp) {
-        return { templateType: null };
+        return { templateType: config.templateType };
       }
 
       var choices = [{
@@ -217,19 +217,19 @@ var AyenGenerator = yeoman.generators.Base.extend({
         default: 0,
       }];
 
-      return callbacks.call(self.prompt.bind(self, prompts));
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
     }).then(function (props) {
       self.templateType = props.templateType;
 
     }).then(done);
   },
 
-  _templatePackageJSON: function (context) {
+  _templatePackageJSON: function () {
     var source = '_package.json';
     var destination = 'package.json';
 
     // Adds to package.json instead of replacing it completely
-    var json = JSON.parse(_.template(this.src.read(source), context));
+    var json = JSON.parse(_.template(this.src.read(source), this));
     var oldJson = {};
     try {
       oldJson = this.dest.readJSON(destination);
@@ -257,38 +257,57 @@ var AyenGenerator = yeoman.generators.Base.extend({
     }
   },
 
+  _setUpTemplateHelpers: function () {
+    var cssExtension = 'css';
+    switch (this.cssPrecompiler) {
+      case 'stylus':
+        cssExtension = 'styl';
+        break;
+      case 'less':
+        cssExtension = 'less';
+        break;
+      case 'sass':
+        cssExtension = 'scss';
+        break;
+      }
+    this.cssExtension = cssExtension;
+  },
+
   writing: {
     app: function () {
-      var context = {
-        appName: this.appName,
-        author: this.author,
-        keywords: this.keywords,
-        githubName: this.githubName,
-        packageName: this.packageName,
-        description: this.description,
-        stagingURL: this.stagingURL,
-        templateType: this.templateType,
-        compilerFeatures: this.compilerFeatures,
-        cssPrecompiler: this.cssPrecompiler,
-      };
+      this._setUpTemplateHelpers();
 
       this.dest.mkdir('client');
-      this.dest.mkdir('client/js');
-      this.dest.mkdir('client/css');
-      this.dest.mkdir('client/templates');
-      this.dest.mkdir('client/templates/includes');
+      this.template('client/index.jade', 'client/index.jade');
 
-      this.template('client/index.jade', 'client/index.jade', context);
-      this.directory('client/js', 'client/js');
-      this.directory('client/css', 'client/css');
-      this.directory('client/assets', 'client/assets');
-      this.directory('client/templates', 'client/templates');
+      if (this.templateApp) {
+        var jsVariant;
+        var hasTemplatizer = this.compilerFeatures.templates;
+        switch (this.templateType) {
+          case 'react':
+            jsVariant = 'react';
+            break;
+          case 'backbone':
+            jsVariant = hasTemplatizer ? 'backbone-templates' : 'backbone';
+            break;
+          default:
+            jsVariant = hasTemplatizer ? 'plain-templates' : 'plain';
+            break;
+        }
 
-      this.directory('server', 'server');
+        this.directory('client/js-' + jsVariant + '/js', 'client/js');
+        this.directory('client/css-' + this.cssPrecompiler + '/css', 'client/css');
+        this.directory('client/assets', 'client/assets');
+        if (hasTemplatizer) {
+          this.directory('client/templates', 'client/templates');
+        }
+
+        this.directory('server', 'server');
+        this.directory('tests', 'tests');
+      }
+
       this.directory('gulp', 'gulp');
-      this.directory('tests', 'tests');
-
-      this._templatePackageJSON(context);
+      this._templatePackageJSON();
       this.template('_bower.json', 'bower.json');
       this.src.copy('_gulpfile.js', 'gulpfile.js');
       this.src.copy('bowerrc', '.bowerrc');

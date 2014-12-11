@@ -36,10 +36,18 @@ config.aliasify = {
   }
 };
 
+<% if (cssPrecompiler === 'stylus') { %>
 config.stylus = {
-    'include css': true,
-    'resolve url': true,
+  'include css': true,
+  'resolve url': true,
 };
+<% } else if (cssPrecompiler === 'less') { %>
+config.less = {
+};
+<% } else if (cssPrecompiler === 'sass') { %>
+config.sass = {
+};
+<% } %>
 
 config.autoprefixer = [
   'ie >= 8',
