@@ -11,7 +11,6 @@ var browserSync = require('browser-sync');
 
 var browserify = require('browserify');
 var watchify = require('watchify');
-var istanbul = require('browserify-istanbul');
 var debowerify = require('debowerify');
 var deamdify = require('deamdify');
 var aliasify = require('aliasify');
@@ -37,11 +36,11 @@ function generateMainJS(opts) {
     bundle.transform(filterTransform(function (file) {
       return /bower_components/.test(file);
     } ,deamdify));
-    if (opts.instanbul) {
-      bundle.transform(istanbul({
+    <% if (useTests) { %>if (opts.instanbul) {
+      bundle.transform(require('browserify-istanbul')({
         ignore: ['**/lib/**']
       }));
-    }
+    }<% } %>
 
     if (opts.incremental) { 
       bundle = watchify(bundle);
@@ -66,7 +65,7 @@ gulp.task('js:dist', ['js:dependencies', 'index.html:dist'], function () {
     .pipe($.uglify())
     .pipe(gulp.dest(paths.public));
 });
-
+<% if (useTests) { %>
 // Bundles Browserify with Istanbul coverage maps.
 gulp.task('js:coverage', ['js:dependencies'], function () {
   return generateMainJS({
@@ -74,7 +73,7 @@ gulp.task('js:coverage', ['js:dependencies'], function () {
     istanbul: true,
   }).pipe(gulp.dest(paths.public + '/js/'));
 });
-
+<% } %>
 // Bundles Browserify incrementally with source maps
 gulp.task('js', ['js:dependencies'], function () {
   return generateMainJS({

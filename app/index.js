@@ -37,7 +37,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
     var done = this.async();
     var self = this;
     var config = this._configuration = this.config.getAll();
-    var rescaffolding = !_.isEmpty(this.config);
+    var rescaffolding = !_.isEmpty(config);
 
     // Have Yeoman greet the user.
     this.log(yosay(
@@ -179,6 +179,17 @@ var AyenGenerator = yeoman.generators.Base.extend({
         self.compilerFeatures[x] = true;
       });
 
+      var prompts = [{
+        type: 'confirm',
+        name: 'useTests',
+        message: 'Do you want to be able to test your app (experimental)?',
+        default: false,
+      }];
+
+      return callbacks.call(self._promptAndSave.bind(self, prompts, config));
+    }).then(function (props) {
+      self.useTests = props.useTests;
+
       if (!rescaffolding) {
         return { templateApp: false };
       }
@@ -312,6 +323,10 @@ var AyenGenerator = yeoman.generators.Base.extend({
       this.src.copy('_gulpfile.js', 'gulpfile.js');
       this.src.copy('bowerrc', '.bowerrc');
       this.src.copy('postinstall.sh', 'postinstall.sh');
+
+      if (this.useTests) {
+        this.dest.delete('gulp/test.js');
+      }
 
       this.config.set(this._configuration);
     },
