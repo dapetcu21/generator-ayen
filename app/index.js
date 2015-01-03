@@ -179,6 +179,9 @@ var AyenGenerator = yeoman.generators.Base.extend({
         self.compilerFeatures[x] = true;
       });
 
+      // FIXME: Disabling testing until actually implemented
+      return { useTests: false };
+
       var prompts = [{
         type: 'confirm',
         name: 'useTests',
@@ -219,6 +222,9 @@ var AyenGenerator = yeoman.generators.Base.extend({
         name: 'ReactJS + Flux app with a router',
         value: 'react',
       }];
+
+      // FIXME: Disabling templates that are not functional yet
+      return { templateType: 'bare' };
 
       var prompts = [{
         type: 'list',
