@@ -7,6 +7,7 @@
 ## Features:
 
 * Choose between [Stylus](http://learnboost.github.io/stylus/), [SASS](http://sass-lang.com/), [LESS](http://lesscss.org/) or just plain CSS
+* Start with a bare JS app template or with a [React](http://facebook.github.io/react/) + [Flux](https://facebook.github.io/flux/) scaffold.
 * Write modular code with [Browserify](http://browserify.org/)
 * Compile your HTML templates with [Jade](http://jade-lang.com/) and [templatizer](https://github.com/HenrikJoreteg/templatizer)
 * Manage your dependencies with [npm](https://www.npmjs.org/) and [Bower](http://bower.io/)
@@ -111,12 +112,13 @@ This runs the in continuous live-reload mode (just like `gulp watch`).
 gulp pagespeed
 ```
 
-Checks your site automatically agains [Google's Pagepeed](https://developers.google.com/speed/pagespeed/insights/).
+Checks your site automatically against [Google's Pagepeed](https://developers.google.com/speed/pagespeed/insights/).
 
 ## Known issues
 
 * Live reload breaks on each error
 * Tests are not implemented yet
+* Sometimes, the server process remains orphaned in the background after gulp quits
 
 ## License
 
