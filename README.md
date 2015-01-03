@@ -1,8 +1,21 @@
 # generator-ayen [![Build Status](https://secure.travis-ci.org/dapetcu21/generator-ayen.png?branch=master)](https://travis-ci.org/dapetcu21/generator-ayen)
 
-> [Yeoman](http://yeoman.io) generator with <b>A</b>nything <b>Y</b>ou'll <b>E</b>ver <b>N</b>eed to write a single-page app. Features live-reloading development workflow, Browserify, Bower integration, Jade templates, Stylus and testing tools.
+> [Yeoman](http://yeoman.io) generator with <b>A</b>nything <b>Y</b>ou'll <b>E</b>ver <b>N</b>eed to write a single-page app. Features live-reloading development workflow, Browserify, Bower integration, Jade templates, a CSS preprocessor and testing tools.
 
-## Getting Started
+**WARNING:** This generator is still in flux. Expect breaking changes.
+
+## Features:
+
+* Choose between [Stylus](http://learnboost.github.io/stylus/), [SASS](http://sass-lang.com/), [LESS](http://lesscss.org/) or just plain CSS
+* Write modular code with [Browserify](http://browserify.org/)
+* Compile your HTML templates with [Jade](http://jade-lang.com/) and [templatizer](https://github.com/HenrikJoreteg/templatizer)
+* Manage your dependencies with [npm](https://www.npmjs.org/) and [Bower](http://bower.io/)
+* Watch and automatically reload your project when the sources change with [Browsersync](http://www.browsersync.io/)
+* Write a custom server for your app for advanced functionality
+* Develop easier with source maps
+* Produce a [minified](https://github.com/mishoo/UglifyJS2), production ready build with [autoprefixed](https://github.com/postcss/autoprefixer-core) styles and [critical path CSS](https://github.com/pocketjoso/penthouse)
+
+## Installation
 
 ### Install Yeoman
 
@@ -28,7 +41,7 @@ Ayen projects need [Gulp](http://gulpjs.com/) to work. You know the drill:
 npm install -g gulp
 ```
 
-### Creating a project
+## Creating a project
 
 Pick a good spot on your hard drive for your project and cd to it:
 
@@ -47,25 +60,63 @@ Now just answer all the questions truthfully and you're done.
 
 *P.S.:* Did you know you can run `yo ayen` again even after you've already scaffolded an app? Yeoman will help you resolve conflicting files, so don't worry about losing your work if you re-scaffold.
 
-### Using your new project
+Ayen knows to play nice with your project even after you've done some work, so don't hesitate to upgrade your build environment whenever a new version of ayen is out.
 
-Usually, what you'll want to do is run `gulp watch` in a separate window, then forget about it and hack away at the project with your favorite text editor. Every time you save a file, ayen's internal hamsters will sniff you out and reload the browser window for you, so you can see what you're modifying on a quick glance. We use [Browsersync](http://www.browsersync.io/) for this, in case you're wondering. (**Known bug:** `gulp watch` will quit on syntax errors and you'll have to run it again. 
+## Using your new project
 
-If you want to get a super-quick development build, run `gulp build`, then gloat over your brain-child in the `www` folder. (**WARNING:** contains symlinks)
+### Watching
 
-If you want to get an optimized, production-ready build, then `gulp build:dist` is for you. Be sure to run `gulp clean` first if the `www` folder is not empty.
+Start the watcher:
 
-If you want to use the same live-reloading process as `gulp watch`, but for the test suite (TDD), run `gulp test:watch`.
+```bash
+gulp watch
+```
 
-If you just want to run the tests once, run `gulp test`.
+A browser window will pop out. It will reload whenever you make a change to a file.
 
-To check your site automatically against [Google's Pagespeed](https://developers.google.com/speed/pagespeed/insights/), just run `gulp pagespeed`.
+At this point, you can start hacking away with your favorite text editor.
 
-**WARNING:** Anything related to testing is currently broken. Check back later.
+You will find browser-side code in `./client` and server-side code in `./server`.
 
-### Developing your new project
+### Building
 
-TODO
+```bash
+gulp build:dist
+```
+
+This builds for production and outputs the results in `./public`.
+
+
+```bash
+gulp build
+```
+
+This builds a minimal development build in `./public`. It contains symlinks, so you may not want to move it around.
+
+### Testing (Work in Progress)
+
+```build
+gulp test
+```
+
+This runs the tests once
+
+```build
+gulp test:watch
+```
+
+This runs the in continuous live-reload mode (just like `gulp watch`).
+
+```build
+gulp pagespeed
+```
+
+Checks your site automatically agains [Google's Pagepeed](https://developers.google.com/speed/pagespeed/insights/).
+
+## Known issues
+
+* Live reload breaks on each error
+* Tests are not implemented yet
 
 ## License
 
