@@ -1,4 +1,43 @@
+html
+  height: 100%
+
 body
-  margin: 0 2em
+  // To prevent margin collapsing
+  position: absolute
+  top: 0
+  left: 0
+  width: 100%
+
+  height: 100%
+  margin: 0
   padding: 0
-  background-color: alpha(#ffff00, 0.1)
+  background: #F6F6F6
+
+#main-view
+  color: #394042
+  background: #fff
+  margin: 2em auto 0 auto
+  padding: 1em
+  max-width: 900px
+  min-height: 100% // fallback
+  min-height: calc(100% - 2em)
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.5)
+  border-top-left-radius: 3px
+  border-top-right-radius: 3px
+
+// Taken straight out of Bootstrap
+screen-xs-max = 767px
+screen-sm-min = 768px
+screen-sm-max = 991px
+
+@media (min-width: screen-sm-min) and (max-width: screen-sm-max)
+  #main-view
+    max-width: 700px
+
+@media (max-width: screen-xs-max)
+  #main-view
+    margin-top: 0
+    box-shadow: none
+    min-height: 100%
+    border-top-left-radius: 0px
+    border-top-right-radius: 0px

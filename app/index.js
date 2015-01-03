@@ -314,7 +314,9 @@ var AyenGenerator = yeoman.generators.Base.extend({
         }
 
         this.directory('server', 'server');
-        this.directory('tests', 'tests');
+        if (this.useTests) {
+          this.directory('tests', 'tests');
+        }
       }
 
       this.directory('gulp', 'gulp');
@@ -325,7 +327,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
       this.src.copy('postinstall.sh', 'postinstall.sh');
 
       if (this.useTests) {
-        this.dest.delete('gulp/test.js');
+        this.src.copy('gulp_test.js', 'gulp/test.js');
       }
 
       this.config.set(this._configuration);
