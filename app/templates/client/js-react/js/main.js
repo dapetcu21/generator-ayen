@@ -5,18 +5,22 @@ var templates = require('templates');
 var _ = require('lodash');
 var $ = require('jquery');
 var loadcss = require('./loadcss');
+var React = require('react');
+
+var RouteCreator = require('./actions/RouteCreator');
+var MainView = require('./views/MainView');
 
 _.once(function () {
   $(window).ready(function () {
-
     // Asynchronously load our main CSS file. Required for critical CSS
     loadcss('css/main.css');
 
-    $('#main-view').html(templates.exampleTemplate({
-      someArg: 'Hello World!',
-    }));
+    // Start routing
+    RouteCreator.start();
 
-    console.log('Hello from Javascript');
+    // Render main view
+    var mainView = React.createElement(MainView, {});
+    React.render(mainView, $('#main-view')[0]);
   });
 })();
 

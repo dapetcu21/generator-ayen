@@ -15,7 +15,8 @@ var debowerify = require('debowerify');
 var deamdify = require('deamdify');
 var aliasify = require('aliasify');
 var filterTransform = require('filter-transform');
-
+<% if (compilerFeatures.react) { %>var reactify = require('reactify');
+<% } %>
 function generateMainJS(opts) {
   opts = opts || {};
 
@@ -30,7 +31,8 @@ function generateMainJS(opts) {
     bundle = config.shared.incrementalBundle;
   } else {
     bundle = browserify(browserifyOpts);
-
+    <% if (compilerFeatures.react) { %>
+    bundle.transform(reactify);<% } %>
     bundle.transform(aliasify.configure(config.aliasify));
     bundle.transform(debowerify);
     bundle.transform(filterTransform(function (file) {

@@ -212,19 +212,21 @@ var AyenGenerator = yeoman.generators.Base.extend({
         return { templateType: config.templateType };
       }
 
+      // FIXME: Write backbone template as well
       var choices = [{
         name: 'Simple JS app',
         value: 'bare',
-      },{
+      },/*{
         name: 'BackboneJS app with a router',
         value: 'backbone',
-      },{
-        name: 'ReactJS + Flux app with a router',
-        value: 'react',
-      }];
+      }*/];
 
-      // FIXME: Disabling templates that are not functional yet
-      return { templateType: 'bare' };
+      if (self.compilerFeatures.react) {
+        choices.push({
+          name: 'ReactJS + Flux app with a router',
+          value: 'react',
+        });
+      }
 
       var prompts = [{
         type: 'list',

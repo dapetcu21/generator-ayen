@@ -13,8 +13,8 @@ config.paths = {
 };
 
 config.browserify = {
-  
-};
+<% if (compilerFeatures.react) { %>  extensions: ['.jsx'],
+<% } %>};
 
 // Conventionally, Bower Javascript packages used to export globals. Deamdify
 // strips away this behaviour in favor of module.exports
