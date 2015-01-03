@@ -1,7 +1,6 @@
 // Load bower-installed libraries. Don't remove this
 require('bower-components');
 
-var templates = require('templates');
 var _ = require('lodash');
 var $ = require('jquery');
 var loadcss = require('./loadcss');

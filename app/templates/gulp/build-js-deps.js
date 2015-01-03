@@ -8,8 +8,10 @@ var _ = require('lodash');
 
 var path = require('path');
 var nodefn = require('when/node');
-var templatizer = require('templatizer');
 var mainBowerFiles = require('main-bower-files');
+<% if (compilerFeatures.templates) { 
+%>var templatizer = require('templatizer');
+<% } %>
 
 <% if (compilerFeatures.templates) {
 %>// Generate JS functions from Jade templates.

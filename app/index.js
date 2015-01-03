@@ -194,7 +194,7 @@ var AyenGenerator = yeoman.generators.Base.extend({
       self.useTests = props.useTests;
 
       if (!rescaffolding) {
-        return { templateApp: false };
+        return { templateApp: true };
       }
 
       var prompts = [{
