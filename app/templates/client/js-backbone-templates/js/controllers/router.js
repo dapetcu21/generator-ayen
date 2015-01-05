@@ -1,22 +1,23 @@
-var AppDispatcher = require('../AppDispatcher');
 var Backbone = require('../lib/backbone-jquery');
 var $ = require('jquery');
-
-var Router = Backbone.Router;
+var Route = require('../models/route');
 
 // You can and should break the route down in a descriptor 
 // object here. This is a simple example, so we're just passing
-// the route string as it is in the action payload
-var RouteCreator = Router.extend({
+// the route string as it is in to the Route model
+var Router = Backbone.Router.extend({
+  initialize: function (opts) {
+    opts = opts || {};
+    this.model = opts.model || new Route();
+    Router.__super__.initialize.apply(this, arguments);
+  },
+
   routes: {
     '*route': '_dispatch',
   },
 
   _dispatch: function (route) {
-    AppDispatcher.dispatch({
-      actionType: 'route-change',
-      route: (route || '').replace(/\/$/, ''),
-    });
+    this.model.set('route', (route || '').replace(/\/$/, ''));
   },
 
   start: function () {
@@ -52,4 +53,4 @@ var RouteCreator = Router.extend({
   }
 });
 
-module.exports = new RouteCreator();
+module.exports = Router;

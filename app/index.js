@@ -212,14 +212,13 @@ var AyenGenerator = yeoman.generators.Base.extend({
         return { templateType: config.templateType };
       }
 
-      // FIXME: Write backbone template as well
       var choices = [{
         name: 'Simple JS app',
         value: 'bare',
-      },/*{
+      },{
         name: 'BackboneJS app with a router',
         value: 'backbone',
-      }*/];
+      }];
 
       if (self.compilerFeatures.react) {
         choices.push({
@@ -318,7 +317,8 @@ var AyenGenerator = yeoman.generators.Base.extend({
         this.directory('client/css-' + this.cssPrecompiler + '/css', 'client/css');
         this.directory('client/assets', 'client/assets');
         if (hasTemplatizer) {
-          this.directory('client/templates', 'client/templates');
+          var templateVariant = this.templateType === 'backbone' ? 'templates-backbone' : 'templates';
+          this.directory('client/' + templateVariant, 'client/templates');
         }
 
         this.directory('server', 'server');

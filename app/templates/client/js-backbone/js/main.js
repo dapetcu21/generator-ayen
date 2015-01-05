@@ -1,22 +1,24 @@
 // Load bower-installed libraries. Don't remove this
 require('bower-components');
 
-var templates = require('templates');
 var _ = require('lodash');
 var $ = require('jquery');
 var loadcss = require('./loadcss');
 
+var MainView = require('./views/main-view');
+
 _.once(function () {
   $(window).ready(function () {
-
     // Asynchronously load our main CSS file. Required for critical CSS
     loadcss('css/main.css');
 
-    $('#main-view').html(templates.exampleTemplate({
-      someArg: 'Hello World!',
-    }));
+    // Create main view
+    var mainView = new MainView({
+      el: $('#main-view')[0]
+    });
 
-    console.log('Hello from Javascript');
+    // Start routing
+    mainView.startRouter();
   });
 })();
 

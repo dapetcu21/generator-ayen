@@ -7,7 +7,7 @@
 ## Features:
 
 * Choose between [Stylus](http://learnboost.github.io/stylus/), [SASS](http://sass-lang.com/), [LESS](http://lesscss.org/) or just plain CSS
-* Start with a bare JS app template or with a [React](http://facebook.github.io/react/) + [Flux](https://facebook.github.io/flux/) scaffold.
+* Start with a bare JS app template, with a [Backbone](http://backbonejs.org/) app or with a [React](http://facebook.github.io/react/) + [Flux](https://facebook.github.io/flux/) scaffold.
 * Write modular code with [Browserify](http://browserify.org/)
 * Compile your HTML templates with [Jade](http://jade-lang.com/) and [templatizer](https://github.com/HenrikJoreteg/templatizer)
 * Manage your dependencies with [npm](https://www.npmjs.org/) and [Bower](http://bower.io/)
