@@ -23,8 +23,8 @@ gulp.task('css', function () {
 
 // Generate CSS for production
 gulp.task('css:dist', ['index.html:dist'], function () {
-  config.shared.mainCssPath = 'css/main.css'; //Needed by critical
-  return resolveUseref(generateMainCSS(), config.shared.refSpec.css, 'css/main.css')
+  config.shared.mainCssPath = '/css/main.css'; //Needed by critical
+  return resolveUseref(generateMainCSS(), config.shared.refSpec.css, '/css/main.css')
     .pipe($.minifyCss())
     .pipe(gulp.dest(paths.public));
 });

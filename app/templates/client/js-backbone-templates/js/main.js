@@ -10,7 +10,7 @@ var MainView = require('./views/main-view');
 _.once(function () {
   $(window).ready(function () {
     // Asynchronously load our main CSS file. Required for critical CSS
-    loadcss('css/main.css');
+    loadcss('/css/main.css');
 
     // Create main view
     var mainView = new MainView({

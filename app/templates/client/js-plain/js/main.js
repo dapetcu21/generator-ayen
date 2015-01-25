@@ -15,7 +15,7 @@ _.once(function () {
   $(window).ready(function () {
 
     // Asynchronously load our main CSS file. Required for critical CSS
-    loadcss('css/main.css');
+    loadcss('/css/main.css');
 
     $('#main-view').html(mainViewHtml);
 

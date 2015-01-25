@@ -63,7 +63,7 @@ function generateMainJS(opts) {
 
 // Bundles Browserify for production; no source or coverage maps.
 gulp.task('js:dist', ['js:dependencies', 'index.html:dist'], function () {
-  return resolveUseref(generateMainJS(), config.shared.refSpec.js, 'js/main.js')
+  return resolveUseref(generateMainJS(), config.shared.refSpec.js, '/js/main.js')
     .pipe($.uglify())
     .pipe(gulp.dest(paths.public));
 });

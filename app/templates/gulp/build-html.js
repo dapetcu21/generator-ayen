@@ -18,6 +18,7 @@ function generateIndexHTML() {
 // Generate index.html for development
 gulp.task('index.html', function () {
   return generateIndexHTML()
+    .pipe($.replace(/([^\/])bower_components/g, '$1/bower_components'))
     .pipe(gulp.dest(paths.public))
     .pipe(browserSync.reload({stream: true}));
 });
