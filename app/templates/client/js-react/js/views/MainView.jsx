@@ -9,10 +9,9 @@ var NotFoundPage = require('./NotFoundPage');
 
 var MainView = React.createClass({
   componentDidMount: function () {
-    var self = this;
     RouteStore.on('change', function () {
-      self.forceUpdate();
-    });
+      this.forceUpdate();
+    }, this);
   },
 
   componentWillUnmount: function () {
