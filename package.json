@@ -1,6 +1,6 @@
 {
   "name": "generator-ayen",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Yeoman generator for a full stack, testable, web app development workflow with Browserify, Jade, Stylus/SASS/LESS, Gulp and Bower",
   "license": "MPL-2.0",
   "main": "app/index.js",
