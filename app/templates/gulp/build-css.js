@@ -3,11 +3,14 @@ var paths = config.paths;
 var $ = config.plugins;
 
 var gulp = require('gulp');
+var gutil = require('gulp-util');
 var browserSync = require('browser-sync');
 var resolveUseref = require('./common/resolve-useref');
 
+var pipeErrors = require('./common/pipe-errors');
+
 function generateMainCSS() {
-  return gulp.src(paths.client + '/css/main.<%= cssExtension %>')
+  return pipeErrors(gulp.src(paths.client + '/css/main.<%= cssExtension %>'))
     .pipe($.expectFile({ errorOnFailure: true, silent: true }, '**/*.<%= cssExtension %>'))<%
 if (cssPrecompiler !== 'css') { %>
     .pipe($.<%= cssPrecompiler %>(config.<%= cssPrecompiler %>))<% } %>
@@ -18,7 +21,7 @@ if (cssPrecompiler !== 'css') { %>
 gulp.task('css', function () {
   return generateMainCSS()
     .pipe(gulp.dest(paths.public + '/css'))
-    .pipe(browserSync.reload({stream: true}));
+    .pipe(browserSync.reload({stream: true}))
 });
 
 // Generate CSS for production

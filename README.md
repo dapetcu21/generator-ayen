@@ -116,7 +116,6 @@ Checks your site automatically against [Google's Pagepeed](https://developers.go
 
 ## Known issues
 
-* Live reload breaks on each error
 * Tests are not implemented yet
 * Sometimes, the server process remains orphaned in the background after gulp quits
 

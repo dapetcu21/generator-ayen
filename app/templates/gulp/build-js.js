@@ -9,6 +9,8 @@ var resolveUseref = require('./common/resolve-useref');
 
 var browserSync = require('browser-sync');
 
+var pipeErrors = require('./common/pipe-errors');
+
 var browserify = require('browserify');
 var watchify = require('watchify');
 var debowerify = require('debowerify');
@@ -50,7 +52,7 @@ function generateMainJS(opts) {
     }
   }
 
-  stream = bundle.bundle();
+  stream = pipeErrors(bundle.bundle());
 
   if (opts.uglify) {
     stream = stream.pipe($.uglify());

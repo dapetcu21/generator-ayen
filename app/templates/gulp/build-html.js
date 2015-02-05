@@ -7,8 +7,10 @@ var browserSync = require('browser-sync');
 var wiredep = require('wiredep').stream;
 var useref = require('node-useref');
 
+var pipeErrors = require('./common/pipe-errors');
+
 function generateIndexHTML() {
-  return gulp.src(paths.client + '/index.jade')
+  return pipeErrors(gulp.src(paths.client + '/index.jade'))
     .pipe($.jade({
       pretty: true
     }))
